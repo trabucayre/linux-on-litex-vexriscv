@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       # Checkout Repository
       - name: Checkout
@@ -29,10 +29,10 @@ jobs:
       # Install RISC-V GCC
       - name: Install RISC-V GCC
         run: |
-          wget https://raw.githubusercontent.com/enjoy-digital/litex/master/litex_setup.py
-          python3 litex_setup.py gcc
+          wget https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.1.0-2019.01.0-x86_64-linux-ubuntu14.tar.gz
+          tar -xf $PWD/riscv64-*.tar.gz
           sudo mkdir /usr/local/riscv
-          sudo cp -r $PWD/../riscv64-*/* /usr/local/riscv
+          sudo cp -r $PWD/riscv64-*/* /usr/local/riscv
 
       # Test
       - name: Run Tests
