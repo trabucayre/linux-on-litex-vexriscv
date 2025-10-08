@@ -78,6 +78,9 @@ def main():
         soc_kwargs = Board.soc_kwargs
         soc_kwargs.update(board.soc_kwargs)
 
+        # Builder optionals args.
+        build_opt_args = {}
+
         # CPU parameters ---------------------------------------------------------------------------
 
         # If Wishbone Memory is forced, enabled L2 Cache (if not already):
@@ -94,7 +97,11 @@ def main():
 
         # SoC parameters ---------------------------------------------------------------------------
         if args.device is not None:
-            soc_kwargs.update(device=args.device)
+            if args.device == "12F_25F":
+                soc_kwargs.update(device="25F")
+                build_opt_args["idcode"] = "0x21111043"
+            else:
+                soc_kwargs.update(device=args.device)
         if args.variant is not None:
             soc_kwargs.update(variant=args.variant)
         if args.toolchain is not None:
@@ -179,7 +186,7 @@ def main():
             csr_json     = os.path.join(build_dir, "csr.json"),
             csr_csv      = os.path.join(build_dir, "csr.csv")
         )
-        builder.build(run=args.build, build_name=board_name)
+        builder.build(run=args.build, build_name=board_name, **build_opt_args)
 
         # DTS --------------------------------------------------------------------------------------
         soc.generate_dts(board_name, args.rootfs)
