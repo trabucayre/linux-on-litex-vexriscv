@@ -96,6 +96,17 @@ def main():
         VexRiscvSMP.args_read(args)
 
         # SoC parameters ---------------------------------------------------------------------------
+
+        # Default ULX4M_LS-V2 is 12F, but this model is too
+        # small, using 12F_25F allows to have PnR for 25F
+        # and bitstream's idcode overriden for 12F
+        if args.board in ["ulx4m_ls_v2"]:
+            if args.device is None:
+                args.device = "12F_25F"
+            else:
+                if args.device in ["12F"]:
+                    raise ValueError(f"ECP5 12F is too small: please uses 12F_25F instead")
+
         if args.device is not None:
             if args.device == "12F_25F":
                 soc_kwargs.update(device="25F")
