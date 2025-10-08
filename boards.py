@@ -452,6 +452,19 @@ class ULX4M_LD_V2(Board):
             "video_terminal",
         })
         
+# ULX4M-LS-V2 support ------------------------------------------------------------------------------------
+class ULX4M_LS_V2(Board):
+    soc_kwargs = {"uart_name": "serial", "sys_clk_freq": int(50e6), "l2_size" : 2048} # Use Wishbone and L2 for memory accesse$
+    def __init__(self):
+        from litex_notes.targets import radiona_ulx4m_ls_v2
+        Board.__init__(self, radiona_ulx4m_ls_v2.BaseSoC, soc_capabilities={
+            # Communication
+            "serial",
+            "ethernet",
+            # Storage
+            "sdcard",
+        })
+
 # HADBadge support ---------------------------------------------------------------------------------
 
 class HADBadge(Board):
